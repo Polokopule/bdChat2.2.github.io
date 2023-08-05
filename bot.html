@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/emoji-awesome/0.0.2/css/emojione.min.css" integrity="sha512-L559zM45D0F93S60ppT5NqSYEBsw248P1htcIgritDybHkyzFG9PpFyBFOpUhjQRGpU1nW4P+SlmhL54r8VS4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  	  <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
+<meta charset="UTF-8">
+  <title>Chat App</title>
+  <link rel="stylesheet" href="styles.css">
+  	<style>
+  		/* Reset default margin and padding */
+body, h1, p {
+  margin: 0;
+  padding: 0;
+}
+/* Define the font family with fallback options */
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+/* Set the height of the navbar and style it */
+.navbar {
+  height: 60px;
+  background-color: #333;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position:fixed;
+  width: 100%;
+  z-index:1;
+  
+}
+
+/* Style the logo and app name in the navbar */
+.navbar img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+/* Set the height of the chat container and add some basic styling */
+.chat-container {
+  min-height: calc(100vh - 120px);
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+/* Style the chat messages */
+.m-caution{
+  background-color: #fff;
+  padding: 8px;
+  margin: 10px 0;
+  border-radius: 8px;
+  font-size: 10px;
+  text-align: center;
+}
+.msgYou{
+  background-color: #888;
+  padding: 8px;
+  margin: 5px 0;
+  color:#fff;
+  border-radius: 8px;
+  
+  
+  font-size: 12px;
+  
+ position:relative;
+ 
+}
+
+.msgYou:before{
+	content:'You';
+	position: absolute;
+	top:-20px;
+	left:0;
+	padding:10x;
+	background:red;
+}
+.msgBot{
+  background-color: #008E4E;
+  padding: 8px;
+  margin: 5px 0;
+  color:#fff;
+  border-radius: 8px;
+  font-size: 12px;
+ 
+ 
+}
+
+/* Set the height and style the input container */
+.input-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 10px;
+  background-color: #f2f2f2;
+  display: flex;
+  align-items: center;
+}
+
+/* Style the input and send button */
+.input-container input {
+  
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+   width:300px;
+}
+
+.input-container button {
+  margin-left: 5px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  cursor: pointer;
+}
+.input-container button:last-child {
+  margin-left: 5px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  background-color: #008E4E;
+  color: #fff;
+  cursor: pointer;
+}
+
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin: 5px;
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+}
+
+.recordingAnimation {
+  width: 30px;
+  height: 30px;
+  background-color: red;
+  border-radius: 50%;
+  animation: pulse 1s infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.message-container {
+  display:flex;
+  flex-direction: column;
+ 
+  
+  
+}
+ 
+input[type='radio'] {
+	display: none;
+}
+.message {
+  display: inline-block;
+  max-width: 70%;
+  margin: 10px;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.from {
+  background-color: #DCF8C6;
+  align-self: flex-start;
+}
+
+.to {
+  background-color: #EAEAEA;
+  align-self: flex-end;
+}
+
+.profile {
+  font-weight: bold;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #777;
+}
+.progress-bar {
+  width: 200px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #222;
+  position: relative;
+}
+
+.progress {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff00, #00ff00 50%, #222 50%);
+  background-size: 200% 100%;
+  border-radius: 5px;
+  animation: progressAnimation 5s linear forwards;
+}
+
+@keyframes progressAnimation {
+  0% {
+    background-position: 0% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
+}
+
+img{
+	width:30px;
+}
+
+
+
+  		/* Style the button to look like a dropdown button */
+.dropbtn {
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  right:10px;
+  top:10px;
+}
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+   margin-top:20px;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+/* Style the labels inside the dropdown */
+.dropdown-content label {
+  color: #333;
+  padding: 12px 16px;
+  display: block;
+}
+
+/* Change color on hover */
+.dropdown-content label:hover {
+  background-color: #f1f1f1;
+}
+
+/* Show the dropdown menu when the user clicks on the button */
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+input{
+	outline: none;
+}
+		/* Style for the modal */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; /* Enable scrolling if needed */
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+/* Style for the modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px;
+  text-align: center;
+}
+
+/* Style for the close button (x) */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Style for the folder icon */
+.folder-icon img {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 20px;
+}
+
+  	
+  		</style>
+</head>
+<body>
+  <div class="navbar">
+    
+    <h1 id="topic">bdChat2.2</h1>
+      </div>
+  <br><br><br>
+  	<div id="topics_box" class="box" >
+
+<div class="message-container" id="msg">
+	
+	</div>
+  
+    <!-- More chat messages... -->
+  <br><br><br>  </div>
+    <div class="popup" id="recordingPopup">
+    <div class="recordingAnimation"></div>
+    <p>Recording...</p>
+     <button id="stopButton" onclick="stopRecording()">Stop</button> 
+  </div> 
+  <div class="input-container">
+    <input type="text" id="input" placeholder="Type your message...">
+    <button onclick="SendQuestion()">Send</button>
+  
+  </div>
+  
+  <!-- The modal -->
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div class="folder-icon">
+      <!-- Folder icon from Font Awesome -->
+      <i class="fas fa-folder"></i>
+    </div>
+    <h2>Upload  your File</h2>
+    <input type="file" id="fileInput">
+    	  <button onclick="SendFile()">Send</button>
+  </div>
+</div>
+
+<!-- Button to open the modal -->
+
+  <script> 
+/* const currentDate = new Date();
+const year = currentDate.getFullYear();
+const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+const day = String(currentDate.getDate()).padStart(2, '0');
+const formattedDate = `${year}-${month}-${day}`;
+*/
+	var  msg = document.getElementById('msg');
+
+
+  var QA = [
+    {
+  question:'hello',
+  answer:'Heyy'
+  },
+  {
+  question:'i love you',
+  answer:' wait what? '
+  },
+  {
+  question:'i am single and i love you',
+  answer:'tell me your joking? '
+  },{
+  question:'i am srs',
+  answer:'too bad, i am taken'
+  },
+  {
+  question:'who can date you, your just a chat bot',
+  answer:' i was wondering the same, why do you want to date a chatbot '
+  },{
+  question:'i was just joking',
+  answer:' nah bro your single '
+  },{
+  question:'stop it, i said i was joking',
+  answer:''
+  },
+  {
+  question:'',
+  answer:',sorry sir i was joking'
+  },
+  {
+  question:'how are you',
+  answer:'good and you '
+  },{
+  	question:'good',
+  	answer:'great!,how can i help you today'
+  },{
+  	question:'can you generate qr code',
+  	answer:'yes i can do that, use this command @your-text-or-url'
+  
+  },{
+  	question:'thank you',
+  	answer:'your welcome'
+  
+  }
+  ];
+  const modal = document.getElementById('myModal');
+const btn = document.getElementById('openModalBtn');
+
+// Get the <span> element that closes the modal
+const span = document.getElementsByClassName('close')[0];
+
+// Function to open the modal
+function openModal() {
+  modal.style.display = 'block';
+}
+
+// Function to close the modal
+function closeModal() {
+  modal.style.display = 'none';
+}
+
+// Attach event listeners to the button and close button
+btn.addEventListener('click', openModal);
+span.addEventListener('click', closeModal);
+
+// Close the modal if the user clicks outside of it
+window.addEventListener('click', event => {
+  if (event.target === modal) {
+    closeModal();
+  }
+});
+	function openFile() {
+        var file = document.getElementById("fileInput").files[0];
+        var reader = new FileReader();
+        
+        reader.onload = function(event) {
+            var contents = event.target.result;
+                 setTimeout(() => {
+                 	 	msg.innerHTML+=`<div class="message  to" >
+      <div class="profile">Bot</div>
+      <i>${ document.getElementById("fileInput").value}</i>
+     <pre><code class="html hljs" id="fileX" > <!-- Your HTML code here --> 
+   
+     </code></pre>
+   
+      </div>
+      
+      </div>`;
+
+ var array = document.getElementById("fileX");
+ array.textContent=contents;
+//.textContent=contents;
+	
+	autoScroll();
+	closeModal();
+		},200);
+            //document.getElementById("editor").innerHTML = contents;
+        }
+        
+        reader.readAsText(file);
+    }
+// Function to handle file selection
+  function SendFile(){
+openFile();
+ /* 	alert("sending...")
+    const fileContent = event.target.result;
+    
+     setTimeout(() => {
+				
+				msg.innerHTML+=`<div class="message  to">
+      <div class="profile">Bot</div>
+    "You uploaded: ${fileInput}"<br>
+    	${fileContent}
+     
+      </div>
+      
+      </div>`;
+      
+
+	autoScroll();
+	closeModal();
+		},2000);
+		reader.readAsText(file);
+		*/
+  };
+
+  
+function autoScroll() {
+  // Adjust the scroll speed by changing the second argument (in milliseconds)
+  const scrollSpeed = 10;
+  
+  const scrollStep = 1;
+  const scrollInterval = setInterval(() => {
+    window.scrollBy(0, scrollStep);
+    
+    // Stop scrolling when reaching the bottom of the page
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+      clearInterval(scrollInterval);
+    }
+  }, scrollSpeed);
+}
+
+// Call the function to start automatic scrolling
+
+var input = document.getElementById("input");
+input.focous();
+
+ 
+function SendQuestion(){
+	
+	var input = document.getElementById("input");
+	var  title= document.getElementById("topic");
+var  options= document.getElementById("options");
+	var  msg = document.getElementById('msg');
+
+	var  allChats= document.getElementById("topics_box");
+	var val= input.value.toLowerCase()
+//	var val= input.value;
+	const check = val.indexOf(':');
+  if (check !== -1) {
+    var text = val.slice(check + 1);
+     
+/*var newOption = document.createElement('label'); newOption.innerHTML= text; 
+newOption.setAttribute('for',text+'1');
+// Set the value if needed // Append the new option to the select element 
+options.appendChild(newOption);
+*/
+
+/*allChats.innerHTML+=`
+<div class='chat'>
+	<input type="radio" name="chat" id="${text}1"/>
+<div class="message-container" id="${text}">
+	${text}
+	</div></div>`;
+	
+	*/
+		
+  
+  
+    // Generate the QR code using a QR code library (e.g., qrcode.js)
+       } 
+		
+			 msg.innerHTML+=`<div class="message from" >
+      <div class="profile">You</div>
+      <div class="message-content">${input.value}</div>
+      <div class="timestamp">10:00 AM</div>
+      
+    </div>
+ `;  
+ 		var qoute2 ="read this file";
+					const foundIndex2 = val.indexOf(qoute2);
+
+if(foundIndex2 !== -1) {
+	setTimeout(() => {
+	msg.innerHTML+=`<div class="message  to">
+      <div class="profile">Bot</div>
+      upload your file, when a popup box shows up
+    
+       
+      </div>`;
+      	},10);
+      autoScroll();
+      setTimeout(() => {
+      	
+openModal();
+	autoScroll();
+		},3000);
+		
+  
+   }
+			var qoute ="motivation";
+					const foundIndex = val.indexOf(qoute);
+
+if (foundIndex !== -1) {
+   
+    const Qlist = [ "It's not about being born in a rich or poor family, but it's about the values and principles we instill in our lives that truly matter.", "A rich family is not defined by the size of their bank account but by the richness of love and support they share with one another.", "3. " + "Poverty isn't just about financial limitations; it's about the strength and resilience that families show in the face of adversity.","Being rich isn't always about material possessions; the real wealth lies in the relationships we build within our family.", "In both rich and poor families, it's the unity, compassion, and understanding that can lead to genuine happiness and success." ];
+   var rand = Math.floor(Math.random()*Qlist.length);
+    setTimeout(() => {
+				
+				msg.innerHTML+=`<div class="message  to">
+      <div class="profile">Bot</div>
+    " ${Qlist[rand]}"
+    
+      </div>
+      
+      </div>`;
+      
+
+	autoScroll();
+		},2000);
+		
+		
+} 
+//	if(QA[i].question == 'motivation')
+	for(var i =0; i < QA.length; i++){
+		if(val == QA[i].question){
+				var ans = QA[i].answer;
+				setTimeout(() => {
+				
+				msg.innerHTML+=`<div class="message  to">
+      <div class="profile">Bot</div>
+      ${ans}
+    
+       
+      </div>`;
+      
+
+	autoScroll();
+		},2000);
+		
+		
+		}
+	}
+	autoScroll();
+	input.value = "";
+}
+
+// Accessing a question, answer, and screenshot URL
+
+  	 
+  	// Global variables
+let recognition;
+let isRecording = false;
+
+function startRecording() {
+  if ('webkitSpeechRecognition' in window) {
+    recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      isRecording = true;
+    };
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      let finalTranscript = '';
+
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + ' ';
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+
+      // Display the interim and final results in the result div
+      document.getElementById('result').innerText = finalTranscript;
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error occurred:', event.error);
+      stopRecording();
+    };
+
+    recognition.onend = () => {
+      isRecording = false;
+    };
+
+    recognition.start();
+  } else {
+    console.error('Web Speech API is not supported in this browser.');
+  }
+}
+
+function stopRecording() {
+  if (recognition) {
+    recognition.stop();
+  }
+}
+  	const startButton = document.getElementById('startButton');
+const stopButton = document.getElementById('stopButton');
+const recordingPopup = document.getElementById('recordingPopup');
+
+startButton.addEventListener('click', () => {
+  recordingPopup.style.display = 'block';
+});
+
+stopButton.addEventListener('click', () => {
+  recordingPopup.style.display = 'none';
+});
+
+  </script>
+  <script>
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('pre code').forEach((block) => {
+      hljs.highlightBlock(block);
+    });
+  });
+</script>
+
+</body>
+</html>
